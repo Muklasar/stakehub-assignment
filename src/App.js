@@ -13,12 +13,12 @@ function App() {
     { qty: 23, price: 100 },
   ]);
   const [seller, setSeller] = useState([
-    { qty: 70, price: 105 },
-    { qty: 70, price: 104 },
-    { qty: 150, price: 103 },
-    { qty: 130, price: 102 },
-    { qty: 20, price: 101 },
     { qty: 20, price: 100 },
+    { qty: 20, price: 101 },
+    { qty: 130, price: 102 },
+    { qty: 150, price: 103 },
+    { qty: 70, price: 104 },
+    { qty: 70, price: 105 },
   ]);
   const [item, setItem] = useState({
     qty: "",
@@ -117,7 +117,7 @@ function App() {
                     </tr>
                   </thead>
                   <tbody>
-                    {buyer.reverse().map((item, index) => (
+                    {buyer.map((item, index) => (
                       <tr key={index}>
                         <td>{item.qty}</td>
                         <td>{item.price}</td>
@@ -135,7 +135,7 @@ function App() {
                     </tr>
                   </thead>
                   <tbody>
-                    {seller.reverse().map((item, index) => (
+                    {seller.map((item, index) => (
                       <tr key={index}>
                         <td>{item.qty}</td>
                         <td>{item.price}</td>
