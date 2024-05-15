@@ -26,7 +26,7 @@ function App() {
     seleteValue: "",
   });
   const [ordered, setOrdered] = useState([]);
-  const [update, setUpdate] = useState(false)
+  const [update, setUpdate] = useState(false);
 
   useEffect(() => {
     calculation();
@@ -47,13 +47,15 @@ function App() {
       );
       sellerMatch && arr.push(sellerMatch);
     });
-    setOrdered([...ordered, ...arr])
+    setOrdered([...ordered, ...arr]);
     const updatedBuyer = buyer.filter(
-      (buyerItem) => !arr.find((matchedItem) => matchedItem.price === buyerItem.price)
+      (buyerItem) =>
+        !arr.find((matchedItem) => matchedItem.price === buyerItem.price)
     );
     const updatedSeller = seller.filter(
-      (sellerItem) => !arr.find((matchedItem) => matchedItem.price === sellerItem.price)
-    );  
+      (sellerItem) =>
+        !arr.find((matchedItem) => matchedItem.price === sellerItem.price)
+    );
     setBuyer(updatedBuyer);
     setSeller(updatedSeller);
     // console.log({ arr, buyer, seller, updatedBuyer, updatedSeller });
@@ -73,7 +75,7 @@ function App() {
         price: "",
         seleteValue: "",
       });
-      setUpdate(!update)
+      setUpdate(!update);
       toast.success("Added Successfully");
     } else {
       delete item.seleteValue;
@@ -83,7 +85,7 @@ function App() {
         price: "",
         seleteValue: "",
       });
-      setUpdate(!update)
+      setUpdate(!update);
     }
   };
 
@@ -93,7 +95,10 @@ function App() {
       <nav className="navbar navbar-light bg-light">
         <div className="container-fluid">
           <a className="navbar-brand" href="#">
-            Navbar
+            Stakehub Infotech
+          </a>
+          <a className="navbar-brand" href="#">
+            Muklasar Rahaman (ph: 7278993253)
           </a>
         </div>
       </nav>
@@ -185,7 +190,11 @@ function App() {
                   onChange={changeHanler}
                 />
               </div>
-              <button type="submit" className="btn btn-primary w-100" style={{outline:"none"}}>
+              <button
+                type="submit"
+                className="btn btn-primary w-100"
+                style={{ outline: "none" }}
+              >
                 Add
               </button>
             </form>
