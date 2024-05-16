@@ -10,10 +10,8 @@ function App() {
     { qty: 70, price: 97 },
     { qty: 80, price: 96 },
     { qty: 85, price: 95 },
-    { qty: 23, price: 100 },
   ]);
   const [seller, setSeller] = useState([
-    { qty: 20, price: 100 },
     { qty: 20, price: 101 },
     { qty: 130, price: 102 },
     { qty: 150, price: 103 },
@@ -25,12 +23,12 @@ function App() {
     price: "",
     seleteValue: "",
   });
-  const [ordered, setOrdered] = useState([]);
-  const [update, setUpdate] = useState(false);
+  const [ordered, setOrdered] = useState([{ qty: 20, price: 100 }]);
+  // const [update, setUpdate] = useState(false);
 
-  useEffect(() => {
-    calculation();
-  }, [update]);
+  // useEffect(() => {
+  //   calculation();
+  // }, [update]);
 
   const changeHanler = (e) => {
     const { name, value } = e.target;
@@ -39,28 +37,31 @@ function App() {
     setItem({ ...item, [name]: parsedValue });
   };
 
-  const calculation = () => {
-    let arr = [];
-    const matchingPrices = buyer.map((buyerItem) => {
-      const sellerMatch = seller.find(
-        (sellerItem) => sellerItem.price === buyerItem.price
-      );
-      sellerMatch && arr.push(sellerMatch);
-    });
-    setOrdered([...ordered, ...arr]);
-    const updatedBuyer = buyer.filter(
-      (buyerItem) =>
-        !arr.find((matchedItem) => matchedItem.price === buyerItem.price)
-    );
-    const updatedSeller = seller.filter(
-      (sellerItem) =>
-        !arr.find((matchedItem) => matchedItem.price === sellerItem.price)
-    );
-    setBuyer(updatedBuyer);
-    setSeller(updatedSeller);
-    // console.log({ arr, buyer, seller, updatedBuyer, updatedSeller });
-    console.log({ arr, buyer, seller });
-  };
+  // const calculation = () => {
+  //   let arr = [];
+  //   const matchingPrices = buyer.map((buyerItem) => {
+  //     const sellerMatch = seller.find(
+  //       (sellerItem) => sellerItem.price === buyerItem.price
+  //     );
+  //     sellerMatch && arr.push(sellerMatch);
+  //   });
+  //   setOrdered([...ordered, ...arr]);
+
+  //   console.log({ item });
+  //   // const updatedBuyer =
+  //   // const updatedBuyer = buyer.filter(
+  //   //   (buyerItem) =>
+  //   //     !arr.find((matchedItem) => matchedItem.price === buyerItem.price)
+  //   // );
+  //   const updatedSeller = seller.filter(
+  //     (sellerItem) =>
+  //       !arr.find((matchedItem) => matchedItem.price === sellerItem.price)
+  //   );
+  //   // setBuyer(updatedBuyer);
+  //   // setSeller(updatedSeller);
+  //   // console.log({ arr, buyer, seller, updatedBuyer, updatedSeller });
+  //   console.log({ arr, buyer, seller });
+  // };
   const submitHanlder = (e) => {
     e.preventDefault();
     if (item.seleteValue == "" || item.value == "" || item.price == "") {
@@ -69,23 +70,34 @@ function App() {
     }
     if (item.seleteValue == "buyer") {
       delete item.seleteValue;
-      setBuyer([...buyer, item]);
+      const matchBuyer = seller.find((it) => it.price == item.price);
+      const newItem = { qty: item.qty - matchBuyer.qty, price: item.price };
+      const newSeller = seller.filter(sl=>sl.price!=item.price)
+      setSeller(newSeller)
+      setBuyer([...buyer, newItem]);
+      setOrdered([...ordered, matchBuyer])
       setItem({
         qty: "",
         price: "",
         seleteValue: "",
       });
-      setUpdate(!update);
+      // setUpdate(!update);
       toast.success("Added Successfully");
     } else {
       delete item.seleteValue;
-      setSeller([...seller, item]);
+      const matchBuyer = buyer.find((it) => it.price == item.price);
+      const newItem = { qty: item.qty - matchBuyer.qty, price: item.price };
+      const newSeller = seller.filter(sl=>sl.price!=matchBuyer.price)
+      const newBuyer = buyer.filter((it) => it.price != item.price);
+      setSeller([...newSeller, newItem]);
+      setBuyer([...newBuyer]);
+      setOrdered([...ordered, matchBuyer])
       setItem({
         qty: "",
         price: "",
         seleteValue: "",
       });
-      setUpdate(!update);
+      // setUpdate(!update);
     }
   };
 
