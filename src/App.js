@@ -72,10 +72,10 @@ function App() {
       delete item.seleteValue;
       const matchBuyer = seller.find((it) => it.price == item.price);
       const newItem = { qty: item.qty - matchBuyer.qty, price: item.price };
-      const newSeller = seller.filter(sl=>sl.price!=item.price)
-      setSeller(newSeller)
+      const newSeller = seller.filter((sl) => sl.price != item.price);
+      setSeller(newSeller);
       setBuyer([...buyer, newItem]);
-      setOrdered([...ordered, matchBuyer])
+      setOrdered([...ordered, matchBuyer]);
       setItem({
         qty: "",
         price: "",
@@ -86,17 +86,61 @@ function App() {
     } else {
       delete item.seleteValue;
       const matchBuyer = buyer.find((it) => it.price == item.price);
-      const newItem = { qty: item.qty - matchBuyer.qty, price: item.price };
-      const newSeller = seller.filter(sl=>sl.price!=matchBuyer.price)
-      const newBuyer = buyer.filter((it) => it.price != item.price);
-      setSeller([...newSeller, newItem]);
-      setBuyer([...newBuyer]);
-      setOrdered([...ordered, matchBuyer])
+      const matchSeller = seller.find((it) => it.price == item.price);
+      console.log({ matchBuyer, item });
+      let newItem;
+      if(!matchBuyer & !matchSeller){
+        setSeller([...seller, item]);
+      }
+      if (matchBuyer) {
+        if (item.qty >= matchBuyer.qty) {
+          const fiterBuyer = buyer.filter((it) => it.price != item.price);
+          setBuyer(fiterBuyer);
+          let sellItem = {qty: item.qty-matchBuyer.qty, price:item.price}
+          if(sellItem.qty !=0){
+            setSeller([...seller, sellItem])
+          }
+          setOrdered([...ordered, matchBuyer]);
+        } else {
+          const newBuyItem = buyer.map((sl) => {
+            if (sl.price == item.price) {
+              return {
+                ...sl,
+                qty: sl.qty - item.qty,
+              };
+            }
+            return sl;
+          });
+          setBuyer(newBuyItem);
+          setOrdered([...ordered, item]);
+        }
+      }
+      if (matchSeller) {
+        const newSellItem = seller.map((sl) => {
+          if (sl.price == item.price) {
+            return {
+              ...sl,
+              qty: sl.qty + item.qty,
+            };
+          }
+          return sl;
+        });
+        // console.log({ newSellItem });
+        // newItem = { qty: item.qty + matchSeller.qty, price: item.price };
+        setSeller(newSellItem);
+      } 
+
+      // console.log({ newItem });
+      // const newSeller = seller.filter((sl) => sl.price != item.price);
+      // const newBuyer = buyer.filter((it) => it.price != item.price);
+      // setBuyer([...newBuyer]);
+      // setOrdered([...ordered, matchBuyer])
       setItem({
         qty: "",
         price: "",
         seleteValue: "",
       });
+      toast.success("Added Successfully");
       // setUpdate(!update);
     }
   };
